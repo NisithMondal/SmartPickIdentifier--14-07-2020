@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "767367672005",
+    "firebase_url": "https://smartpickidentifier.firebaseio.com",
+    "project_id": "smartpickidentifier",
+    "storage_bucket": "smartpickidentifier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767367672005:android:3cc3dd983d884d6acac0ac",
+        "android_client_info": {
+          "package_name": "com.nisith.SmartPickIdentifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767367672005-31b4hnuuulbso3qeko5i7tl5ttvng7u5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgPRkE0bj2ysadKIcHDmtHMCLZczlkxu8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767367672005-31b4hnuuulbso3qeko5i7tl5ttvng7u5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
