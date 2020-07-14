@@ -11,11 +11,14 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int FLOWER_MODEL_OPTION = 110;
     private static final int CURRENCY_MODEL_OPTION = 111;
     private int selectedOption;
+    private int checkedRadioButtonIdForFlowerModel;
+    private int checkedRadioButtonIdForCurrencyModel;
 
 
 
@@ -84,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
         initialiseLocalFlowerModel(mySharedPreference.getConfidenceValueForFlowerModel());
         initialiseLocalCurrencyModel(mySharedPreference.getConfidenceValueForCurrencyModel());
         selectedOption = FLOWER_MODEL_OPTION;
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.radio_options, null, false);
+        RadioGroup radioGroup = layout.findViewById(R.id.radio_group);
+        checkedRadioButtonIdForFlowerModel = checkedRadioButtonIdForCurrencyModel = radioGroup.getCheckedRadioButtonId();
 
     }
 
@@ -190,51 +199,37 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Now you can identify Indian Currency", Toast.LENGTH_SHORT).show();
     }
 
-
-
-
-
     private void settingImageIconClicked(View view){
-        EditText editText = new EditText(view.getContext());
-        editText.setHint("Enter Value");
-        editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        editText.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_NUMBER_FLAG_DECIMAL);
-       if (selectedOption == FLOWER_MODEL_OPTION){
-           editText.setText(String.valueOf(mySharedPreference.getConfidenceValueForFlowerModel()));
-           showAlertDialog("Set confidence for Flower model", view, editText);
-       }else if (selectedOption == CURRENCY_MODEL_OPTION){
-           editText.setText(String.valueOf(mySharedPreference.getConfidenceValueForCurrencyModel()));
-           showAlertDialog("Set confidence for Currency model", view, editText);
-       }
-    }
+        String dialogTitle;
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.radio_options, null, false);
+        final RadioGroup radioGroup = layout.findViewById(R.id.radio_group);
+        if (selectedOption == FLOWER_MODEL_OPTION){
+            RadioButton checkedRadioButton = layout.findViewById(checkedRadioButtonIdForFlowerModel);
+            checkedRadioButton.setChecked(true);
+            dialogTitle = "Set confidence for Flower model";
+        }else {
+            RadioButton checkedRadioButton = layout.findViewById(checkedRadioButtonIdForCurrencyModel);
+            checkedRadioButton.setChecked(true);
+            dialogTitle = "Set confidence for Currency model";
+        }
 
-    private void showAlertDialog(String dialogTitle, View view, final EditText editText){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(view.getContext())
                 .setTitle(dialogTitle)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String text = editText.getText().toString();
-                        if (text.isEmpty()){
-                            Toast.makeText(MainActivity.this, "Text field is empty", Toast.LENGTH_LONG).show();
-                        }else {
-                            text = text+"f";
-                            float value = Float.parseFloat(text);
-                            if (value > 1){
-                                Toast.makeText(MainActivity.this, "Value not Saved. Value must be in between 0 and 1", Toast.LENGTH_LONG).show();
-                                editText.setError("");
-                                editText.requestFocus();
-                            }else {
                                 if (selectedOption == FLOWER_MODEL_OPTION) {
+                                    checkedRadioButtonIdForFlowerModel = radioGroup.getCheckedRadioButtonId();
+                                    float value = getCheckedRadioButtonValue(checkedRadioButtonIdForFlowerModel);
                                     initialiseLocalFlowerModel(value);
-                                    mySharedPreference.setConfidenceValueForFlowerModel(value);
-                                }else if (selectedOption == CURRENCY_MODEL_OPTION){
+                                    Toast.makeText(MainActivity.this, "Confidence value is changed to "+value, Toast.LENGTH_SHORT).show();
+                                }else if (selectedOption == CURRENCY_MODEL_OPTION) {
+                                    checkedRadioButtonIdForCurrencyModel = radioGroup.getCheckedRadioButtonId();
+                                    float value = getCheckedRadioButtonValue(checkedRadioButtonIdForCurrencyModel);
                                     initialiseLocalCurrencyModel(value);
-                                    mySharedPreference.setConfidenceValueForCurrencyModel(value);
+                                    Toast.makeText(MainActivity.this, "Confidence value is changed to "+value, Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        }
-
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -242,9 +237,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setView(editText);
+                .setView(layout);
         dialogBuilder.create().show();
     }
+
+
 
 
 
@@ -416,6 +413,47 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private float getCheckedRadioButtonValue(int radioButtonId){
+        float value = 0.7f;
+        switch (radioButtonId) {
+            case R.id.radio_button_1:
+                value = 0.0f;
+                break;
+            case R.id.radio_button_2:
+                value = 0.1f;
+                break;
+            case R.id.radio_button_3:
+                value = 0.2f;
+                break;
+            case R.id.radio_button_4:
+                value = 0.3f;
+                break;
+            case R.id.radio_button_5:
+                value = 0.4f;
+                break;
+            case R.id.radio_button_6:
+                value = 0.5f;
+                break;
+            case R.id.radio_button_7:
+                value = 0.6f;
+                break;
+            case R.id.radio_button_8:
+                value = 0.7f;
+                break;
+            case R.id.radio_button_9:
+                value = 0.8f;
+                break;
+            case R.id.radio_button_10:
+                value = 0.9f;
+                break;
+            case R.id.radio_button_11:
+                value = 1.0f;
+                break;
+        }
+        return value;
     }
 
 
